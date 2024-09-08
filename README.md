@@ -18,13 +18,6 @@
 ### TempleWare is an internal cheat for CS2, developed in C++.
 ---
 
-## FAQ
-
-|----------------------------|----------------------------------|
-| Menu Bind    | <kbd>**DELETE**</kbd>       |
-
----
-
 ### How to Launch TempleWare
 
 1. **Build the DLL:**
@@ -38,6 +31,7 @@
 
 3. **Play CS2:**
    - Launch `Counter-Strike 2` and start using TempleWare.
+   - Menu Bind `DELETE`
 
 ---
 
