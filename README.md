@@ -35,8 +35,6 @@
 
 ---
 
-Feel free to adjust the steps if needed!
-
 ## Showcase
 
 <p align="center">
