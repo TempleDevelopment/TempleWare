@@ -18,6 +18,31 @@
 ### TempleWare is an internal cheat for CS2, developed in C++.
 ---
 
+## FAQ
+
+|----------------------------|----------------------------------|
+| Menu Bind    | <kbd>**DELETE**</kbd>       |
+
+---
+
+### How to Launch TempleWare
+
+1. **Build the DLL:**
+   - Open the project in Visual Studio.
+   - Set the build configuration to **Release x64**.
+   - Build the solution (`Build` > `Build Solution`).
+
+2. **Inject the DLL:**
+   - Find the `TempleWare.dll` in the `\Release\x64\` folder.
+   - Use a DLL injector (e.g., [Xenos Injector](https://github.com/xenos/xenos)) to inject `TempleWare.dll` into `cs2.exe`.
+
+3. **Play CS2:**
+   - Launch `Counter-Strike 2` and start using TempleWare.
+
+---
+
+Feel free to adjust the steps if needed!
+
 ## Showcase
 
 <p align="center">
