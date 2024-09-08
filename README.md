@@ -27,7 +27,7 @@
 
 2. **Inject the DLL:**
    - Find the `TempleWare.dll` in the `\Release\x64\` folder.
-   - Use a DLL injector (e.g., [Xenos Injector](https://github.com/xenos/xenos)) to inject `TempleWare.dll` into `cs2.exe`.
+   - Use a DLL injector (e.g., [Extreme Injector](https://github.com/master131/ExtremeInjector)) to inject `TempleWare.dll` into `cs2.exe`.
 
 3. **Play CS2:**
    - Launch `Counter-Strike 2` and start using TempleWare.
