@@ -52,6 +52,8 @@ void RenderImGui()
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
+    ImGuiIO& io = ImGui::GetIO();
+    io.MouseDrawCursor = showMenu;
 
     if (esp) {
         Visuals::PlayerESP();

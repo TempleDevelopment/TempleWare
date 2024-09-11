@@ -11,23 +11,14 @@ ID3D11DeviceContext* pContext = NULL;
 ID3D11RenderTargetView* mainRenderTargetView;
 
 LRESULT __stdcall WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    if (showMenu) {
-        if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) {
-            return true;
-        }
+
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) {
+        return true;
     }
+ 
 
     if (uMsg == WM_KEYDOWN && wParam == VK_DELETE) {
-        showMenu = !showMenu;
-
-        if (showMenu) {
-            ShowCursor(TRUE);
-            SetCursorPos(ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y);
-            ImGui::GetIO().WantCaptureMouse = true;
-        }
-        else {
-            ImGui::GetIO().WantCaptureMouse = true;
-        }
+        showMenu = !showMenu;       
     }
 
     return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
