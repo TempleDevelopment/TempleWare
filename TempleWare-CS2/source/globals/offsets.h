@@ -5,10 +5,10 @@
 
 namespace Offsets
 {
-	constexpr std::ptrdiff_t dwLocalPlayerPawn = 0x17C37F0;
-	constexpr std::ptrdiff_t dwEntityList = 0x1956A68;
-	constexpr std::ptrdiff_t dwViewMatrix = 0x19B89F0;
-	constexpr std::ptrdiff_t dwLocalPlayerController = 0x19A66C8;
+	constexpr std::ptrdiff_t dwLocalPlayerPawn = 0x17C17F0;
+	constexpr std::ptrdiff_t dwEntityList = 0x1954568;
+	constexpr std::ptrdiff_t dwViewMatrix = 0x19B64F0;
+	constexpr std::ptrdiff_t dwLocalPlayerController = 0x19A41C8;
 
 	constexpr std::ptrdiff_t m_hPlayerPawn = 0x7EC;
 

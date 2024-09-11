@@ -6,4 +6,3 @@ extern bool showHealth;
 extern bool showNameTags;
 extern bool showOutline;
 
-

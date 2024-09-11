@@ -90,6 +90,7 @@ void RenderImGui()
                 ImGui::SliderFloat("Thickness", &espThickness, 1.0f, 5.0f);
             }
             ImGui::Separator();
+
             ImGui::Checkbox("Name Tags", &showNameTags);
             if (showNameTags) {
                 ImGui::Checkbox("Health", &showHealth);
@@ -97,6 +98,7 @@ void RenderImGui()
             }
             ImGui::Separator();
             break;
+
         case 1:
             ImGui::Text("Miscellaneous");
             break;
