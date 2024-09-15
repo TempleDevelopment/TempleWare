@@ -16,4 +16,8 @@ namespace Offsets
 	constexpr std::ptrdiff_t m_iTeamNum = 0x3C3;
 	constexpr std::ptrdiff_t m_vOldOrigin = 0x1274;
 	constexpr std::ptrdiff_t m_iFOV = 0x210;
+
+	constexpr std::ptrdiff_t m_bGlowing = 0x51;
+	constexpr std::ptrdiff_t m_glowColorOverride = 0x40;
+	constexpr std::ptrdiff_t m_Glow = 0xBA0;
 }

@@ -9,6 +9,8 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+extern ImVec4 glowColor;
+extern ImVec4 tracersColor;
 extern ImVec4 espColor;
 extern float espThickness;
 extern bool showHealth;
@@ -166,7 +168,7 @@ void Visuals::PlayerTracers()
     if (!entitylist)
         return;
 
-    ImColor lineColor = ImColor(255, 0, 0, 255);
+    ImColor lineColor = ImColor(tracersColor.x * 255, tracersColor.y * 255, tracersColor.z * 255, tracersColor.w * 255);
 
     for (int i = 1; i < 64; i++)
     {
@@ -207,3 +209,50 @@ void Visuals::PlayerTracers()
         }
     }
 }
+
+void Visuals::PlayerGlow()
+{
+    uintptr_t client = (uintptr_t)GetModuleHandle("client.dll");
+    auto localpawn = *(uintptr_t*)(client + Offsets::dwLocalPlayerPawn);
+    if (!localpawn)
+        return;
+
+    auto localTeam = *(int*)(localpawn + Offsets::m_iTeamNum);
+    auto entitylist = *(uintptr_t*)(client + Offsets::dwEntityList);
+    if (!entitylist)
+        return;
+
+    for (int i = 1; i < 64; i++)
+    {
+        uintptr_t list_entry1 = *(uintptr_t*)(entitylist + (8 * (i & 0x7FFF) >> 9) + 16);
+        if (!list_entry1)
+            continue;
+        uintptr_t playerController = *(uintptr_t*)(list_entry1 + 120 * (i & 0x1FF));
+        if (!playerController)
+            continue;
+        uint32_t playerPawn = *(uint32_t*)(playerController + Offsets::m_hPlayerPawn);
+        if (!playerPawn)
+            continue;
+        uintptr_t list_entry2 = *(uintptr_t*)(entitylist + 0x8 * ((playerPawn & 0x7FFF) >> 9) + 16);
+        if (!list_entry2)
+            continue;
+        uintptr_t pCSPlayerPawnPtr = *(uintptr_t*)(list_entry2 + 120 * (playerPawn & 0x1FF));
+        if (!pCSPlayerPawnPtr)
+            continue;
+
+        int team = *(int*)(pCSPlayerPawnPtr + Offsets::m_iTeamNum);
+        if (team == localTeam)
+            continue;
+
+        // Convert ImVec4 to DWORD
+        DWORD colorArgb = ((DWORD)(glowColor.w * 255) << 24) | // Alpha
+            ((DWORD)(glowColor.z * 255) << 16) | // Blue
+            ((DWORD)(glowColor.y * 255) << 8) | // Green
+            ((DWORD)(glowColor.x * 255));        // Red
+
+        *(DWORD*)(pCSPlayerPawnPtr + Offsets::m_Glow + Offsets::m_glowColorOverride) = colorArgb;
+        *(DWORD*)(pCSPlayerPawnPtr + Offsets::m_Glow + Offsets::m_bGlowing) = 1;
+    }
+}
+
+

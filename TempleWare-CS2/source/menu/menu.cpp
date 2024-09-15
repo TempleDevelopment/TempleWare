@@ -3,6 +3,8 @@
 #include "../globals/offsets.h"
 #include "../globals/globals.h"
 
+ImVec4 glowColor = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
+ImVec4 tracersColor = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 ImVec4 espColor = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 bool showMenu = true;
 int activeTab = 0;
@@ -75,6 +77,10 @@ void RenderImGui()
         Visuals::PlayerTracers();
     }
 
+    if (glow) {
+        Visuals::PlayerGlow();
+    }
+
     if (showMenu) {
         ImGui::SetNextWindowSize(ImVec2(500, 300), ImGuiCond_Once);
         ImGui::SetNextWindowPos(ImVec2(50, 50), ImGuiCond_Once);
@@ -110,7 +116,19 @@ void RenderImGui()
             }
             ImGui::Separator();
 
+
+            ImGui::Checkbox("Glow", &glow);
+            if (glow) {
+                ImGui::ColorEdit4("Color", (float*)&glowColor);
+            }
+            ImGui::Separator();
+
+
+
             ImGui::Checkbox("Tracers", &showTracers);
+            if (showTracers) {
+                ImGui::ColorEdit4("Color", (float*)&tracersColor);
+            }
             ImGui::Separator();
 
             ImGui::Checkbox("NameTags", &showNameTags);

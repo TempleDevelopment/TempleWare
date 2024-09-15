@@ -5,3 +5,4 @@ extern float espThickness;
 extern bool showHealth;
 extern bool showNameTags;
 extern bool showTracers;
+extern bool glow;

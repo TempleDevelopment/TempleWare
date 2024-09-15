@@ -7,4 +7,5 @@ namespace Visuals
     void PlayerESP();
     void PlayerNameTags();
     void PlayerTracers();
+    void PlayerGlow();
 }
