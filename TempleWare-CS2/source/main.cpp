@@ -15,14 +15,14 @@ LRESULT __stdcall WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) {
         return true;
     }
- 
 
     if (uMsg == WM_KEYDOWN && wParam == VK_DELETE) {
-        showMenu = !showMenu;       
+        showMenu = !showMenu;
     }
 
     return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
+
 
 bool init = false;
 HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
