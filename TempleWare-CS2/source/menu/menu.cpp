@@ -103,7 +103,6 @@ void RenderImGui()
         case 0:
             ImGui::Text("Aim");
             ImGui::Separator();
-
             break;
 
         case 1:
@@ -111,23 +110,20 @@ void RenderImGui()
             ImGui::Separator();
             ImGui::Checkbox("ESP", &esp);
             if (esp) {
-                ImGui::ColorEdit4("Color", (float*)&espColor);
-                ImGui::SliderFloat("Thickness", &espThickness, 1.0f, 5.0f);
+                ImGui::ColorEdit4("ESP Color", (float*)&espColor);
+                ImGui::SliderFloat("ESP Thickness", &espThickness, 1.0f, 5.0f);
             }
             ImGui::Separator();
-
 
             ImGui::Checkbox("Glow", &glow);
             if (glow) {
-                ImGui::ColorEdit4("Color", (float*)&glowColor);
+                ImGui::ColorEdit4("Glow Color", (float*)&glowColor);
             }
             ImGui::Separator();
 
-
-
             ImGui::Checkbox("Tracers", &showTracers);
             if (showTracers) {
-                ImGui::ColorEdit4("Color", (float*)&tracersColor);
+                ImGui::ColorEdit4("Tracers Color", (float*)&tracersColor);
             }
             ImGui::Separator();
 
@@ -152,6 +148,7 @@ void RenderImGui()
     pContext->OMSetRenderTargets(1, &mainRenderTargetView, NULL);
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
+
 
 void CleanupImGui()
 {
