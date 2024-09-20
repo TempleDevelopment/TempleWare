@@ -5,28 +5,26 @@
 #include <cstdint>
 #include <cstdio>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-
 extern ImVec4 glowColor;
 extern ImVec4 tracersColor;
 extern ImVec4 espColor;
 extern float espThickness;
 extern bool showHealth;
 
+Offset offsets;
+
 void Visuals::PlayerESP()
 {
     uintptr_t client = (uintptr_t)GetModuleHandle("client.dll");
 
-    float(*ViewMatrix)[4][4] = (float(*)[4][4])(client + Offsets::dwViewMatrix);
+    float(*ViewMatrix)[4][4] = (float(*)[4][4])(client + offsets.GetOffset("dwViewMatrix"));
 
-    auto localpawn = *(uintptr_t*)(client + Offsets::dwLocalPlayerPawn);
+    auto localpawn = *(uintptr_t*)(client + offsets.GetOffset("dwLocalPlayerPawn"));
     if (!localpawn)
         return;
 
-    auto localTeam = *(int*)(localpawn + Offsets::m_iTeamNum);
-    auto entitylist = *(uintptr_t*)(client + Offsets::dwEntityList);
+    auto localTeam = *(int*)(localpawn + offsets.GetOffset("m_iTeamNum"));
+    auto entitylist = *(uintptr_t*)(client + offsets.GetOffset("dwEntityList"));
     if (!entitylist)
         return;
 
@@ -38,7 +36,7 @@ void Visuals::PlayerESP()
         uintptr_t playerController = *(uintptr_t*)(list_entry1 + 120 * (i & 0x1FF));
         if (!playerController)
             continue;
-        uint32_t playerPawn = *(uint32_t*)(playerController + Offsets::m_hPlayerPawn);
+        uint32_t playerPawn = *(uint32_t*)(playerController + offsets.GetOffset("m_hPlayerPawn"));
         if (!playerPawn)
             continue;
         uintptr_t list_entry2 = *(uintptr_t*)(entitylist + 0x8 * ((playerPawn & 0x7FFF) >> 9) + 16);
@@ -48,15 +46,15 @@ void Visuals::PlayerESP()
         if (!pCSPlayerPawnPtr)
             continue;
 
-        int health = *(int*)(pCSPlayerPawnPtr + Offsets::m_iHealth);
+        int health = *(int*)(pCSPlayerPawnPtr + offsets.GetOffset("m_iHealth"));
         if (!health || health > 100)
             continue;
 
-        int team = *(int*)(pCSPlayerPawnPtr + Offsets::m_iTeamNum);
+        int team = *(int*)(pCSPlayerPawnPtr + offsets.GetOffset("m_iTeamNum"));
         if (team == localTeam)
             continue;
 
-        Vec3 feetpos = *(Vec3*)(pCSPlayerPawnPtr + Offsets::m_vOldOrigin);
+        Vec3 feetpos = *(Vec3*)(pCSPlayerPawnPtr + offsets.GetOffset("m_vOldOrigin"));
         Vec3 headpos = { feetpos.x, feetpos.y, feetpos.z + 70.0f };
 
         Vec2 feet, head;
@@ -81,14 +79,14 @@ void Visuals::PlayerNameTags()
 {
     uintptr_t client = (uintptr_t)GetModuleHandle("client.dll");
 
-    float(*ViewMatrix)[4][4] = (float(*)[4][4])(client + Offsets::dwViewMatrix);
+    float(*ViewMatrix)[4][4] = (float(*)[4][4])(client + offsets.GetOffset("dwViewMatrix"));
 
-    auto localpawn = *(uintptr_t*)(client + Offsets::dwLocalPlayerPawn);
+    auto localpawn = *(uintptr_t*)(client + offsets.GetOffset("dwLocalPlayerPawn"));
     if (!localpawn)
         return;
 
-    auto localTeam = *(int*)(localpawn + Offsets::m_iTeamNum);
-    auto entitylist = *(uintptr_t*)(client + Offsets::dwEntityList);
+    auto localTeam = *(int*)(localpawn + offsets.GetOffset("m_iTeamNum"));
+    auto entitylist = *(uintptr_t*)(client + offsets.GetOffset("dwEntityList"));
     if (!entitylist)
         return;
 
@@ -100,7 +98,7 @@ void Visuals::PlayerNameTags()
         uintptr_t playerController = *(uintptr_t*)(list_entry1 + 120 * (i & 0x1FF));
         if (!playerController)
             continue;
-        uint32_t playerPawn = *(uint32_t*)(playerController + Offsets::m_hPlayerPawn);
+        uint32_t playerPawn = *(uint32_t*)(playerController + offsets.GetOffset("m_hPlayerPawn"));
         if (!playerPawn)
             continue;
         uintptr_t list_entry2 = *(uintptr_t*)(entitylist + 0x8 * ((playerPawn & 0x7FFF) >> 9) + 16);
@@ -110,15 +108,15 @@ void Visuals::PlayerNameTags()
         if (!pCSPlayerPawnPtr)
             continue;
 
-        int health = *(int*)(pCSPlayerPawnPtr + Offsets::m_iHealth);
+        int health = *(int*)(pCSPlayerPawnPtr + offsets.GetOffset("m_iHealth"));
         if (!health || health > 100)
             continue;
 
-        int team = *(int*)(pCSPlayerPawnPtr + Offsets::m_iTeamNum);
+        int team = *(int*)(pCSPlayerPawnPtr + offsets.GetOffset("m_iTeamNum"));
         if (team == localTeam)
             continue;
 
-        Vec3 feetpos = *(Vec3*)(pCSPlayerPawnPtr + Offsets::m_vOldOrigin);
+        Vec3 feetpos = *(Vec3*)(pCSPlayerPawnPtr + offsets.GetOffset("m_vOldOrigin"));
         Vec3 headpos = { feetpos.x, feetpos.y, feetpos.z + 70.0f };
 
         Vec2 feet, head;
@@ -155,16 +153,16 @@ void Visuals::PlayerTracers()
 
     uintptr_t client = (uintptr_t)GetModuleHandle("client.dll");
 
-    float(*ViewMatrix)[4][4] = (float(*)[4][4])(client + Offsets::dwViewMatrix);
+    float(*ViewMatrix)[4][4] = (float(*)[4][4])(client + offsets.GetOffset("dwViewMatrix"));
 
-    auto localpawn = *(uintptr_t*)(client + Offsets::dwLocalPlayerPawn);
+    auto localpawn = *(uintptr_t*)(client + offsets.GetOffset("dwLocalPlayerPawn"));
     if (!localpawn)
         return;
 
     Vec2 screenCenter = { (float)GetSystemMetrics(SM_CXSCREEN) / 2, (float)GetSystemMetrics(SM_CYSCREEN) / 2 };
 
-    auto localTeam = *(int*)(localpawn + Offsets::m_iTeamNum);
-    auto entitylist = *(uintptr_t*)(client + Offsets::dwEntityList);
+    auto localTeam = *(int*)(localpawn + offsets.GetOffset("m_iTeamNum"));
+    auto entitylist = *(uintptr_t*)(client + offsets.GetOffset("dwEntityList"));
     if (!entitylist)
         return;
 
@@ -175,36 +173,41 @@ void Visuals::PlayerTracers()
         uintptr_t list_entry1 = *(uintptr_t*)(entitylist + (8 * (i & 0x7FFF) >> 9) + 16);
         if (!list_entry1)
             continue;
+
         uintptr_t playerController = *(uintptr_t*)(list_entry1 + 120 * (i & 0x1FF));
         if (!playerController)
             continue;
-        uint32_t playerPawn = *(uint32_t*)(playerController + Offsets::m_hPlayerPawn);
+
+        uint32_t playerPawn = *(uint32_t*)(playerController + offsets.GetOffset("m_hPlayerPawn"));
         if (!playerPawn)
             continue;
+
         uintptr_t list_entry2 = *(uintptr_t*)(entitylist + 0x8 * ((playerPawn & 0x7FFF) >> 9) + 16);
         if (!list_entry2)
             continue;
+
         uintptr_t pCSPlayerPawnPtr = *(uintptr_t*)(list_entry2 + 120 * (playerPawn & 0x1FF));
         if (!pCSPlayerPawnPtr)
             continue;
 
-        int team = *(int*)(pCSPlayerPawnPtr + Offsets::m_iTeamNum);
+        int team = *(int*)(pCSPlayerPawnPtr + offsets.GetOffset("m_iTeamNum"));
         if (team == localTeam)
             continue;
 
-        Vec3 feetpos = *(Vec3*)(pCSPlayerPawnPtr + Offsets::m_vOldOrigin);
+        int health = *(int*)(pCSPlayerPawnPtr + offsets.GetOffset("m_iHealth"));
+        if (health <= 0)
+            continue;
 
+        Vec3 feetpos = *(Vec3*)(pCSPlayerPawnPtr + offsets.GetOffset("m_vOldOrigin"));
         Vec2 feet;
+
         if (feetpos.WorldToScreen(feet, ViewMatrix))
         {
-            ImVec2 screenCenterImVec = ImVec2(screenCenter.x, screenCenter.y);
-            ImVec2 feetImVec = ImVec2(feet.x, feet.y);
-
             ImGui::GetBackgroundDrawList()->AddLine(
-                screenCenterImVec,
-                feetImVec,
+                { screenCenter.x, screenCenter.y },
+                { feet.x, feet.y },
                 lineColor,
-                2.0f
+                espThickness
             );
         }
     }
@@ -213,12 +216,12 @@ void Visuals::PlayerTracers()
 void Visuals::PlayerGlow()
 {
     uintptr_t client = (uintptr_t)GetModuleHandle("client.dll");
-    auto localpawn = *(uintptr_t*)(client + Offsets::dwLocalPlayerPawn);
+    auto localpawn = *(uintptr_t*)(client + offsets_.GetOffset("dwLocalPlayerPawn"));
     if (!localpawn)
         return;
 
-    auto localTeam = *(int*)(localpawn + Offsets::m_iTeamNum);
-    auto entitylist = *(uintptr_t*)(client + Offsets::dwEntityList);
+    auto localTeam = *(int*)(localpawn + offsets_.GetOffset("m_iTeamNum"));
+    auto entitylist = *(uintptr_t*)(client + offsets_.GetOffset("dwEntityList"));
     if (!entitylist)
         return;
 
@@ -227,32 +230,37 @@ void Visuals::PlayerGlow()
         uintptr_t list_entry1 = *(uintptr_t*)(entitylist + (8 * (i & 0x7FFF) >> 9) + 16);
         if (!list_entry1)
             continue;
+
         uintptr_t playerController = *(uintptr_t*)(list_entry1 + 120 * (i & 0x1FF));
         if (!playerController)
             continue;
-        uint32_t playerPawn = *(uint32_t*)(playerController + Offsets::m_hPlayerPawn);
+
+        uint32_t playerPawn = *(uint32_t*)(playerController + offsets_.GetOffset("m_hPlayerPawn"));
         if (!playerPawn)
             continue;
+
         uintptr_t list_entry2 = *(uintptr_t*)(entitylist + 0x8 * ((playerPawn & 0x7FFF) >> 9) + 16);
         if (!list_entry2)
             continue;
+
         uintptr_t pCSPlayerPawnPtr = *(uintptr_t*)(list_entry2 + 120 * (playerPawn & 0x1FF));
         if (!pCSPlayerPawnPtr)
             continue;
 
-        int team = *(int*)(pCSPlayerPawnPtr + Offsets::m_iTeamNum);
+        int team = *(int*)(pCSPlayerPawnPtr + offsets_.GetOffset("m_iTeamNum"));
         if (team == localTeam)
             continue;
 
-        // Convert ImVec4 to DWORD
-        DWORD colorArgb = ((DWORD)(glowColor.w * 255) << 24) | // Alpha
-            ((DWORD)(glowColor.z * 255) << 16) | // Blue
-            ((DWORD)(glowColor.y * 255) << 8) | // Green
-            ((DWORD)(glowColor.x * 255));        // Red
+        int health = *(int*)(pCSPlayerPawnPtr + offsets_.GetOffset("m_iHealth"));
+        if (health <= 0)
+            continue;
 
-        *(DWORD*)(pCSPlayerPawnPtr + Offsets::m_Glow + Offsets::m_glowColorOverride) = colorArgb;
-        *(DWORD*)(pCSPlayerPawnPtr + Offsets::m_Glow + Offsets::m_bGlowing) = 1;
+        DWORD colorArgb = ((DWORD)(glowColor.w * 255) << 24) |
+            ((DWORD)(glowColor.z * 255) << 16) |
+            ((DWORD)(glowColor.y * 255) << 8) |
+            ((DWORD)(glowColor.x * 255));
+
+        *(DWORD*)(pCSPlayerPawnPtr + offsets_.GetOffset("m_Glow") + offsets_.GetOffset("m_glowColorOverride")) = colorArgb;
+        *(DWORD*)(pCSPlayerPawnPtr + offsets_.GetOffset("m_Glow") + offsets_.GetOffset("m_bGlowing")) = 1;
     }
 }
-
-

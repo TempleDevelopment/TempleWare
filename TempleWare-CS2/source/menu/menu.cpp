@@ -65,20 +65,26 @@ void RenderImGui()
     ImGui::NewFrame();
     ImGuiIO& io = ImGui::GetIO();
 
+    io.MouseDrawCursor = showMenu;
+    io.WantCaptureKeyboard = showMenu; 
+    io.WantCaptureMouse = showMenu; 
+
+    Visuals visuals;
+
     if (esp) {
-        Visuals::PlayerESP();
+        visuals.PlayerESP();
     }
 
     if (showNameTags) {
-        Visuals::PlayerNameTags();
+        visuals.PlayerNameTags();
     }
 
     if (showTracers) {
-        Visuals::PlayerTracers();
+        visuals.PlayerTracers();
     }
 
     if (glow) {
-        Visuals::PlayerGlow();
+        visuals.PlayerGlow();
     }
 
     if (showMenu) {
@@ -148,6 +154,7 @@ void RenderImGui()
     pContext->OMSetRenderTargets(1, &mainRenderTargetView, NULL);
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
+
 
 
 void CleanupImGui()

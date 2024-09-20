@@ -1,11 +1,16 @@
 #pragma once
 #include "math.h"
 #include "../../../external/imgui/imgui.h"
+#include "../../globals/offsets.h"
 
-namespace Visuals
-{
+class Visuals {
+public:
     void PlayerESP();
     void PlayerNameTags();
     void PlayerTracers();
     void PlayerGlow();
-}
+
+private:
+    Offset offsets_;
+};
+
